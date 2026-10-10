@@ -1,4 +1,6 @@
 trigger: None
+  - feature
+  - main
 
 pool: Default
 
@@ -18,13 +20,20 @@ stages:
      - job:
        displayName: Trivy 
        steps:
-         - task
+       - task: trivy@2
+         inputs:
+           version: 'latest'
+           type: 'filesystem'
+
      - job:
        displayName:  Sonarqube
        steps:
        - task: SonarQubeAnalyze@8
          inputs:
            jdkversion: 'JAVA_HOME_17_X64'
+       - task: SonarQubePublish@8
+         inputs:
+           pollingTimeoutSec: '300'
 
      - job:
        displayName:  Gitleak
@@ -40,3 +49,32 @@ stages:
        displayName: OWASP-ZAP
        steps:
          - task
+     
+     - job: 
+       steps:
+       displayName: PR-approval ----feature baranch- Dev-merge
+         - task
+
+
+  - stage: Init FMT Validate
+    dependsOn: Scaning Tool
+    condition: [Successed]
+    jobs:
+      - job: 
+        steps:
+        displayName: init FMT Validate
+          - task
+            
+          - task
+          - task
+      - job: 
+        steps:
+        displayName: Init Plan InfraCost- Approval
+         - task
+         - task
+         - task
+         - task
+
+
+
+        
