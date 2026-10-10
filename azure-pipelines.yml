@@ -1,0 +1,42 @@
+trigger: None
+
+pool: Default
+
+       
+
+parameters:
+  - name: Dev
+  - name: QA
+  - name: Prod
+
+variables: 
+
+
+stages:
+  - stage: Scaning Tool
+    jobs:
+     - job:
+       displayName: Trivy 
+       steps:
+         - task
+     - job:
+       displayName:  Sonarqube
+       steps:
+       - task: SonarQubeAnalyze@8
+         inputs:
+           jdkversion: 'JAVA_HOME_17_X64'
+
+     - job:
+       displayName:  Gitleak
+       steps:
+         - task
+        
+     - job: 
+       displayName: Checkov
+       steps:
+         - task
+        
+     - job: 
+       displayName: OWASP-ZAP
+       steps:
+         - task
