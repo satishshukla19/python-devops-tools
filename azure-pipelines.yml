@@ -1,5 +1,5 @@
 trigger: None
-  - feature
+  - feature/*
   - main
 
 pool: Default
@@ -8,10 +8,17 @@ pool: Default
 
 parameters:
   - name: Dev
+    default:
+      stateFileName:
   - name: QA
+    default:
+      stateFileName:
+  
   - name: Prod
+    default:
+      stateFileName:
 
-variables: 
+variables: []
 
 
 stages:
@@ -67,13 +74,18 @@ stages:
             
           - task
           - task
+
+  - stage: Init Apply
+    dependsOn: Init FMT Validate
+    condition: [Successed]
+    jobs:
       - job: 
         steps:
-        displayName: Init Plan InfraCost- Approval
-         - task
-         - task
-         - task
-         - task
+        displayName: init apply
+          - task
+            
+          - task
+          - task
 
 
 
